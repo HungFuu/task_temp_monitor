@@ -118,7 +118,7 @@ int main() {
     printf("Starting temperature monitor [Rev: %d, Serial: %s]\n",
         config.hardware_revision, config.serial_number);
     for (int i = 0; i < 100; ++i) { // run 100 samples
-        timer_isr_mock(&adc_val);
+        timer_isr_mock(&adc_val); // call is simulating ISR
         update_monitoring(&config, adc_val);
         usleep(SAMPLE_INTERVAL_US);
     }

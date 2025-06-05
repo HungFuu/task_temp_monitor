@@ -93,7 +93,7 @@ class TemperatureMonitor {
                     << static_cast<int>(config.getRevision()) << ", Serial: "
                     << config.getSerialNumber() << "]\n";
             for (int i = 0; i < samples; ++i) {
-                int adcVal = adc.read(); // reading should be done in the ISR
+                timer_isr_mock();
                 float temp = TemperatureConverter::convert(adcVal, config.getRevision());
                 leds.update(temp);
                 printTemperature(temp);
@@ -106,12 +106,17 @@ class TemperatureMonitor {
         EEPROMConfig config;
         ADC adc;
         LEDController leds;
+        int adcVal;
         void printTemperature(float temp) const {
             if (config.getRevision() == EEPROMConfig::REV_A) {
                 std::cout << "Temp: " << static_cast<int>(temp) << "C\t";
             } else {
                 std::cout << "Temp: " << temp << "C\t";
             }
+        }
+        
+        void timer_isr_mock() {
+           adcVal = adc.read(); // reading should be done in the ISR
         }
 };
 
